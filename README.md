@@ -24,11 +24,11 @@ cmake .. && make
 1. Four input files: 
 
    ```
-   Usage: ./run_lidar2camera <image_path> <pcd_path> <intrinsic_extrinsic_yaml>
+   Usage: ./run_lidar2camera <image_path> <pcd_path> <intrinsic_extrinsic_json>
    ```
 + **image_path:** image file from the Camera sensor
 + **pcd_path:** PCD file from the Lidar sensor
-+ **intrinsic_extrinsic_yaml**: Camera intrinsic and extrinsic parameter YAML file
++ **intrinsic_extrinsic_json**: Camera intrinsic and extrinsic parameter JSON file
 
 
 2. Run the test sample:
@@ -37,7 +37,7 @@ cmake .. && make
 
    ```
    cd ~./manual_calib/
-   ./bin/run_lidar2camera data/000000.png data/000000.pcd data/can_font_center_extrinic.yml
+   ./bin/run_lidar2camera ./data/test.png ./data/test.pcd ./data/test.json
    ```
 
 3. Calibration panel:
