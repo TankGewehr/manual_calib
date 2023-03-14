@@ -20,49 +20,49 @@ void LoadIntrinsic(const std::string &filename,Eigen::Matrix3d &K,std::vector<do
 	if(reader.parse(is,root))
 	{
 		//read intrinsic[9] or intrinsic[3][3]
-		if(!root["intrinsic"].isNull()&&root["intrinsic"].type()==Json::arrayValue)
+		if(!root["undistort_intrinsic"].isNull()&&root["undistort_intrinsic"].type()==Json::arrayValue)
 		{
-			if(root["intrinsic"].size()==3)
+			if(root["undistort_intrinsic"].size()==3)
 			{
-				for(unsigned int i=0;i<root["intrinsic"].size();i++)
+				for(unsigned int i=0;i<root["undistort_intrinsic"].size();i++)
 				{
-					if(root["intrinsic"][i].isNull()||root["intrinsic"][i].type()!=Json::arrayValue)
+					if(root["undistort_intrinsic"][i].isNull()||root["undistort_intrinsic"][i].type()!=Json::arrayValue)
 					{
-						std::cout<<"Error intrinsic type:"<<filename<<":"<<i<<std::endl;
+						std::cout<<"Error undistort_intrinsic type:"<<filename<<":"<<i<<std::endl;
 						is.close();
 						return;
 					}
-					if(root["intrinsic"][i].size()!=3)
+					if(root["undistort_intrinsic"][i].size()!=3)
 					{
-						std::cout<<"Error intrinsic size:"<<filename<<":"<<i<<std::endl;
+						std::cout<<"Error undistort_intrinsic size:"<<filename<<":"<<i<<std::endl;
 						is.close();
 						return;
 					}
-					for(unsigned int j=0;j<root["intrinsic"][i].size();j++)
+					for(unsigned int j=0;j<root["undistort_intrinsic"][i].size();j++)
 					{
-						double data=root["intrinsic"][i][j].asDouble();
+						double data=root["undistort_intrinsic"][i][j].asDouble();
 						intrinsic.push_back(data);
 					}
 				}
 			}
-			else if(root["intrinsic"].size()==9)
+			else if(root["undistort_intrinsic"].size()==9)
 			{
-				for(unsigned int i=0;i<root["intrinsic"].size();i++)
+				for(unsigned int i=0;i<root["undistort_intrinsic"].size();i++)
 				{
-					double data=root["intrinsic"][i].asDouble();
+					double data=root["undistort_intrinsic"][i].asDouble();
 					intrinsic.push_back(data);
 				}
 			}
 			else
 			{
-				std::cout<<"Error intrinsic size:"<<filename<<std::endl;
+				std::cout<<"Error undistort_intrinsic size:"<<filename<<std::endl;
 				is.close();
 				return;
 			}
 		}
 		else
 		{
-			std::cout<<"Error intrinsic type:"<<filename<<std::endl;
+			std::cout<<"Error undistort_intrinsic type:"<<filename<<std::endl;
 			is.close();
 			return;
 		}
@@ -71,15 +71,15 @@ void LoadIntrinsic(const std::string &filename,Eigen::Matrix3d &K,std::vector<do
 			intrinsic[6],intrinsic[7],intrinsic[8];
 
 		//read distortion[]
-		if(root["distortion"].isNull()||root["distortion"].type()!=Json::arrayValue)
+		if(root["undistort_distortion"].isNull()||root["undistort_distortion"].type()!=Json::arrayValue)
 		{
-			std::cout<<"Error distortion type:"<<filename<<std::endl;
+			std::cout<<"Error undistort_distortion type:"<<filename<<std::endl;
 			is.close();
 			return;
 		}
-		for(unsigned int i=0;i<root["distortion"].size();i++)
+		for(unsigned int i=0;i<root["undistort_distortion"].size();i++)
 		{
-			double data=root["distortion"][i].asDouble();
+			double data=root["undistort_distortion"][i].asDouble();
 			distortion.push_back(data);
 		}
 		
