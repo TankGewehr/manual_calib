@@ -10,9 +10,10 @@
             "request": "launch",
             "program": "${workspaceRoot}/bin/run_lidar2camera",
             "args": [
-                "./data/test.jpg",
-                "./data/test.pcd",
-                "./data/test.json"
+                "./data/image.jpg",
+                "./data/pointcloud.pcd",
+                "./data/calibration.json",
+                "false"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
