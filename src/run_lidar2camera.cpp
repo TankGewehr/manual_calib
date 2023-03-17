@@ -215,37 +215,33 @@ int main(int argc,char **argv)
 	string camera_path=argv[1];
 	string lidar_path=argv[2];
 	string extrinsic_json=argv[3];
-	bool undistorted=true;
-	if(argc==5)
-	{
-		//当可选参数<undistorted>启用时，设置图片的去畸变状态为参数值，除false和0以外均为true
-		if(!(strcmp(argv[4],"false")&&strcmp(argv[4],"0")))
-		{
-			undistorted=false;
-		}		
-	}
 
 	cv::Mat img = cv::imread(camera_path);
 	std::cout << extrinsic_json << std::endl;
-	if(!undistorted)
+
+	if(argc==5)
 	{
 		//当可选参数<undistorted>为false或0时，则认为图像没有经过畸变矫正，因此读取原始内参与畸变系数进行去畸变处理
-		Eigen::Matrix3d ori_K;
-		std::vector<double> ori_dist;
-		LoadIntrinsic(extrinsic_json,ori_K,ori_dist,undistorted);
-		cv::Mat ori_intrinsic=cv::Mat::eye(3,3,CV_32FC1);
-		for(int row=0;row<ori_intrinsic.rows;row++)
+		if(!(strcmp(argv[4],"false")&&strcmp(argv[4],"0")))
 		{
-			for(int col=0;col<ori_intrinsic.cols;col++)
+			Eigen::Matrix3d ori_K;
+			std::vector<double> ori_dist;
+			LoadIntrinsic(extrinsic_json,ori_K,ori_dist,false);
+			cv::Mat ori_intrinsic=cv::Mat::eye(3,3,CV_32FC1);
+			for(int row=0;row<ori_intrinsic.rows;row++)
 			{
-				ori_intrinsic.at<float>(row,col)=(float)ori_K(row+col*3);
+				for(int col=0;col<ori_intrinsic.cols;col++)
+				{
+					ori_intrinsic.at<float>(row,col)=(float)ori_K(row+col*3);
+				}
 			}
-		}
-		cv::Mat ori_distortion(ori_dist);
-		cv::Mat undistorted_image;
-		cv::undistort(img,undistorted_image,ori_intrinsic,ori_distortion);
-		img=undistorted_image;
+			cv::Mat ori_distortion(ori_dist);
+			cv::Mat undistorted_image;
+			cv::undistort(img,undistorted_image,ori_intrinsic,ori_distortion);
+			img=undistorted_image;
+		}		
 	}
+
 	pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(
 		new pcl::PointCloud<pcl::PointXYZI>);
 	if (pcl::io::loadPCDFile<pcl::PointXYZI>(lidar_path,*cloud) == -1)
